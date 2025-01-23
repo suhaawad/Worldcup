@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Categories>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@* Link to specific CSS for this view *@
+<link href="~/css/Home.css" rel="stylesheet" type="text/css" />
+
+<div class="container-fluid text-center">
+    <h3 class="display-4">Welcome to Saudi World Cup 2034</h3>
+    <div class="row mt-5">
+        @foreach (var cata in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center mb-4">
+                <a asp-action="@cata.Url" style="text-decoration: none;">
+                    <div class="card d-flex flex-column h-100 custom-card-index">
+                        <img src="~/images/@cata.Image" class="card-img-top rounded" style="object-fit: cover; height: 200px;" >
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                @cata.Name <i class="@cata.Icon"></i>
+                            </h5>
+                            <p class="card-text flex-grow-1">@cata.Description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,51 @@
+@model IEnumerable<Stadiums>
+@{
+    ViewData["Title"] = "Stadiums";
+}
+
+<div>
+    <div class="container">
+        <h1>Stadiums</h1>    
+        <div class="row">
+            <div class="col">
+                @foreach (var items in Model)
+                {
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <img src="/@items.Images" class="rounded" width="@items.Width" height="@items.Height">
+                                </div>
+                                <div class="col">
+                                    <h5>@items.Name</h5>
+                                    <ul class="list list-inline">
+                                        @foreach(var i in items.Facility)
+                                        {
+                                        <li class="list-inline-item">@i</li>
+                                        }
+                                    </ul>
+                                    <div class="row">
+                                        <!-- First Item -->
+                                        <div class="col-md-6">
+                                            <h6>Length: @items.Length</h6>
+                                            <h6>Capacity: @items.Capacity</h6>
+                                            <h6>City: @items.City</h6>
+                                        </div>
+                                        <!-- Second Item -->
+                                        <div class="col-md-6">
+                                            <h6>Owner: @items.Owner</h6>
+                                            <h6>Constraction Date: @items.ContractionDate.ToString("yyyy-MM-dd")</h6>
+                                            <h6>Type: @items.Type</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                }
+            </div>
+        </div>
+    </div>
+</div>
