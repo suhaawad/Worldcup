@@ -1,0 +1,139 @@
+@{
+    Layout="~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Transportation Type";
+}
+<link href="~/css/AdminCss/base.css" rel="stylesheet" type="text/css" />
+@model IEnumerable<TransportType>
+@section Scripts {
+    <script src="~/js/Dashboard/catTrans.js"></script>
+}
+
+
+
+<div class="container-fluid mt-5 mb-5">
+    <div class="row mt-5">
+        <div class="col text-start">
+            <!-- Trigger button -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#catTModal">
+                Create Transportation Type
+            </button>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <ul class="list-group w-100">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">@item.Name</h5>
+                    </div>
+                    <div>
+                        <button 
+                            class="btn btn-danger me-2" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteModal"
+                            data-id="@item.Id"
+                            data-url="/Dashboard/DeleteTransportType/"
+                            data-name="@item.Name">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <button 
+                            class="btn btn-primary" 
+                            title="Edit" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editModal"
+                            data-id="@item.Id"
+                            data-url="/Dashboard/EditTransportType/"
+                            data-name="@item.Name">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+
+
+    @* Modal *@
+    <div class="row mt-5">
+        <!-- Create Modal -->
+        <div class="modal fade" id="catTModal" tabindex="-1" aria-labelledby="catTModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="catTModalLabel">Create Transportation Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="CreateTransportType" method="post">
+                            <!-- Name Field -->
+                            <input type="text" class="form-control " id="categoryName" name="Name" placeholder="Enter Transportation Category Name" required>
+                            <!-- Submit and Cancel Buttons -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="catTModaldeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="catTModaldeleteLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the Type "<span id="data-name"></span>"?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <!-- Form for deletion -->
+                        <form id="deleteForm" method="post">
+                            <input type="hidden" name="Id" id="deleteId" value="" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Transportation Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <!-- Hidden field for ID -->
+                            <input type="hidden" name="id" value="" />
+
+                            <!-- Name Field -->
+                            <input type="text" class="form-control" name="name" placeholder="Enter Category Transportation Name" required />
+
+                            <!-- Submit and Cancel Buttons -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+    </div>
+
+
+
+</div>

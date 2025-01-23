@@ -1,0 +1,173 @@
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var stadiums = ViewBag.stadiums;
+
+}
+
+@model IEnumerable<worldcup.DTO.ScheduleWithStadiumAndTeamsDTO>
+@section Scripts {
+    <script src="~/js/Dashboard/catTrans.js"></script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container-fluid mt-5 mb-5">
+    <div class="row mt-5">
+        <div class="col text-start">
+            <!-- Trigger button -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#catTModal">
+                Create Schedule
+            </button>
+        </div>
+    </div>
+    <div class="row mt-5">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Match Date & Time</th>
+                    <th>Stadium</th>
+                    <th>City</th>
+                    <th>Teams</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ScheduleId</td>
+                        <td>@item.ScheduleDate.ToString("yyyy-MM-dd HH:mm")</td> <!-- Format the datetime -->
+                        <td>@item.StadiumName</td> <!-- Display Stadium Name -->
+                        <td>@item.StadiumCity</td> <!-- Display Stadium Name -->
+                        <td>
+                            @foreach (var teamName in item.TeamNames)
+                            {
+                                <span>@teamName</span><br />
+                            }
+                        </td>
+                        <td>
+                            <button 
+                                class="btn me-2" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#deleteModal"
+                                data-id="@item.ScheduleId"
+                                data-url="/Dashboard/DeleteTransport/"
+                                data-name="@item.ScheduleId"
+                                >
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            <button 
+                                class="btn " 
+                                title="Edit" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editModal"
+                                data-url="/Dashboard/EditTransport/"
+                                data-id="@item.ScheduleId"
+                                data-ScheduleDate="@item.ScheduleDate"
+                                data-StadiumId="@item.StadiumId"
+                                >
+                                <i class="fa-regular fa-pen-to-square fa-sm"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+    @* Modal *@
+    <div class="row mt-5">
+        <!-- Create Modal -->
+        <div class="modal fade" id="catTModal" tabindex="-1" aria-labelledby="catTModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="catTModalLabel">Create Transportation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="CreateTransport" method="post">
+                            <!-- Name Field -->
+                            <select class="form-select" name="stadiums" id="stadiums" required>
+                                <option value="" disabled selected>Select Stadium</option>
+                                @foreach(var item in stadiums)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+
+
+                            <input type="date" class="form-control" name="ScheduleDate" placeholder="Enter Transportation name" required />
+                            <!-- Submit and Cancel Buttons -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="catTModaldeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="catTModaldeleteLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the Type "<span id="data-name"></span>"?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <!-- Form for deletion -->
+                        <form id="deleteForm" method="post">
+                            <input type="hidden" name="Id" id="deleteId" value="" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Schedule</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <!-- Hidden field for ID -->
+                            <input type="hidden" name="id" value="" />
+
+                            <select class="form-select" name="stadiums" id="stadiums" required>
+                                <option value="StadiumId" selected>Select Stadium</option>
+                                @foreach(var item in stadiums)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+
+                            <input type="date" class="form-control" name="ScheduleDate" placeholder="Schedule Date" required />
+
+                            <!-- Submit and Cancel Buttons -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
